@@ -5,8 +5,12 @@ stage('Test') {
         echo "workspace: ${env.WORKSPACE}"
 
         bat '''
+            setlocal EnableDelayedExpansion
+
             set FILE=index.html
+
             set PASS=true
+
             rem Checking required fields
             findstr /C:"Contact form" %FILE% >nul || set PASS=false
             findstr /C:"name" %FILE% >nul || set PASS=false
@@ -23,4 +27,3 @@ stage('Test') {
         '''
     }
 }
-
