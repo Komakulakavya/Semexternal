@@ -34,8 +34,9 @@ pipeline {
         success {
             echo 'The pipeline has succeeded!'
         }
-        failure {     // <<<< use lowercase failure
+        failure { 
             echo 'The pipeline has failed.'
         }
     }
 }
+
