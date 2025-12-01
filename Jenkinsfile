@@ -1,42 +1,26 @@
-pipeline {
-    agent any
+stage('Test') {
+    steps {
+        echo 'stage2 is Testing...'
+        echo "node name: ${env.NODE_NAME}"
+        echo "workspace: ${env.WORKSPACE}"
 
-    stages {
-        stage('Build') {
-            steps {
-                echo 'stage1 is Building...'
-                echo "node name: ${env.NODE_NAME}"
-                echo "workspace: ${env.WORKSPACE}"
-                echo "artifact: ${env.BUILD_NUMBER}"
-            }
-        }
+        bat '''
+            set FILE=index.html
+            set PASS=true
+            rem Checking required fields
+            findstr /C:"Contact form" %FILE% >nul || set PASS=false
+            findstr /C:"name" %FILE% >nul || set PASS=false
+            findstr /C:"email" %FILE% >nul || set PASS=false
+            findstr /C:"subject" %FILE% >nul || set PASS=false
+            findstr /C:"message" %FILE% >nul || set PASS=false
 
-        stage('Test') {
-            steps {
-                echo 'stage2 is Testing...'
-                echo "node name: ${env.NODE_NAME}"
-                echo "workspace: ${env.WORKSPACE}"
-
-                bat '''
-                    findstr /C:"Contact form" index.html >nul
-                    if %ERRORLEVEL%==0 (
-                        echo Test Passed
-                    ) else (
-                        echo Test Failed
-                        exit 1
-                    )
-                '''
-            }
-        }
-    }
-
-    post {
-        success {
-            echo 'The pipeline has succeeded!'
-        }
-        failure { 
-            echo 'The pipeline has failed.'
-        }
+            if "!PASS!"=="true" (
+                echo All required fields are present.
+            ) else (
+                echo One or more fields are missing.
+                exit 1
+            )
+        '''
     }
 }
 
