@@ -28,7 +28,6 @@ pipeline {
                     findstr /C:"placeholder=\\"email\\"" %FILE% >nul || (echo Missing Email field & exit 1)
                     findstr /C:"placeholder=\\"subject\\"" %FILE% >nul || (echo Missing Subject field & exit 1)
                     findstr /C:"placeholder=\\"message\\"" %FILE% >nul || (echo Missing Message field & exit 1)
-
                     echo All fields found - Test Passed!
                 '''
             }
@@ -44,3 +43,4 @@ pipeline {
         }
     }
 }
+
